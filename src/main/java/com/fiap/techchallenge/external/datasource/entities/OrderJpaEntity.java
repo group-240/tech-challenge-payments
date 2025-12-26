@@ -1,41 +1,31 @@
 package com.fiap.techchallenge.external.datasource.entities;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "orders")
+@Document(collection = "orders")
 public class OrderJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customer_id")
     private UUID customerId;
 
 
-    @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private OrderStatusJpa status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_payment", nullable = false)
     private StatusPaymentJpa statusPayment;
 
-    @Column(name = "id_payment")
     private Long idPayment;
 
-    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public OrderJpaEntity() {}

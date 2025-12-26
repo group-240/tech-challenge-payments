@@ -1,19 +1,11 @@
 spring:
   application:
     name: tech-challenge-api
-  datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:techchallenge}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:postgres}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+  data:
+    mongodb:
+      uri: mongodb+srv://techfiap:admintech!@clusterfree.nygqegp.mongodb.net/?appName=ClusterFree
+      database: db_payment
+
   security:
     oauth2:
       resourceserver:

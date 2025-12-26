@@ -1,12 +1,11 @@
 package com.fiap.techchallenge.application.config;
 
-import com.fiap.techchallenge.adapters.controllers.*;
-import com.fiap.techchallenge.adapters.gateway.*;
-import com.fiap.techchallenge.application.usecases.*;
-import com.fiap.techchallenge.domain.repositories.*;
-import com.fiap.techchallenge.external.datasource.repositories.*;
+import com.fiap.techchallenge.adapters.controllers.PaymentController;
+import com.fiap.techchallenge.adapters.gateway.PaymentRepositoryGateway;
+import com.fiap.techchallenge.application.usecases.PaymentUseCase;
+import com.fiap.techchallenge.application.usecases.PaymentUseCaseImpl;
+import com.fiap.techchallenge.domain.repositories.PaymentRepository;
 import com.fiap.techchallenge.external.datasource.mercadopago.MercadoPagoClient;
-import com.fiap.techchallenge.external.cognito.CognitoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
