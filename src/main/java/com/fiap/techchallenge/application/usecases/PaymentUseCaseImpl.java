@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.application.usecases;
 
 import com.fiap.techchallenge.domain.repositories.PaymentRepository;
+import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 
 public class PaymentUseCaseImpl implements PaymentUseCase {
 
@@ -11,7 +12,7 @@ public class PaymentUseCaseImpl implements PaymentUseCase {
     }
 
     @Override
-    public Long createPaymentOrder(
+    public PaymentResponse createPaymentOrder(
         Double amount,
         String description,
         String paymentMethodId,

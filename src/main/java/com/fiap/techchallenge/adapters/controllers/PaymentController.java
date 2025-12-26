@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.adapters.controllers;
 
 import com.fiap.techchallenge.application.usecases.PaymentUseCase;
+import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 
 public class PaymentController {
 
@@ -10,7 +11,7 @@ public class PaymentController {
         this.paymentUseCase = paymentUseCase;
     }
 
-    public Long createPaymentOrder(
+    public PaymentResponse createPaymentOrder(
         Double amount,
         String description,
         String paymentMethodId,

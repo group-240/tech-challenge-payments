@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.techchallenge.domain.exception.DomainException;
+import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 import com.fiap.techchallenge.infrastructure.logging.LogCategory;
 import com.fiap.techchallenge.infrastructure.logging.StructuredLogger;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,9 @@ import java.util.UUID;
 @Component
 public class MercadoPagoClientImpl implements MercadoPagoClient {
 
+    @Autowired
+    private PaymentService paymentService;
+
     private static final Logger logger = LoggerFactory.getLogger(MercadoPagoClientImpl.class);
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -26,7 +32,7 @@ public class MercadoPagoClientImpl implements MercadoPagoClient {
     private String accessToken;
 
     @Override
-    public Long createPaymentOrder(
+    public PaymentResponse createPaymentOrder(
         Double amount,
         String description,
         String paymentMethodId,
@@ -79,21 +85,15 @@ public class MercadoPagoClientImpl implements MercadoPagoClient {
             HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
 
             String response = restTemplate.exchange(url, HttpMethod.POST, request, String.class).getBody();
-            Long paymentId = getPaymentId(response);
-            
+
+            Document document = paymentService.savePaymentJson(response);
+
+            PaymentResponse payment = paymentService.parsePayment(response);
+
             long duration = System.currentTimeMillis() - startTime;
             StructuredLogger.setDuration(duration);
-            StructuredLogger.setPaymentId(paymentId.toString());
-            
-            if (duration > 3000) {
-                logger.warn("MercadoPago payment creation slow: paymentId={}, duration={}ms", 
-                           paymentId, duration);
-            } else {
-                logger.info("MercadoPago payment created successfully: paymentId={}, duration={}ms", 
-                           paymentId, duration);
-            }
-            
-            return paymentId;
+
+            return payment;
             
         } catch (Exception e) {
             long duration = System.currentTimeMillis() - startTime;

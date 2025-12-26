@@ -1,7 +1,9 @@
 package com.fiap.techchallenge.adapters.gateway;
 
 import com.fiap.techchallenge.domain.repositories.PaymentRepository;
+import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 import com.fiap.techchallenge.external.datasource.mercadopago.MercadoPagoClient;
+import org.bson.Document;
 
 public class PaymentRepositoryGateway implements PaymentRepository {
 
@@ -12,7 +14,7 @@ public class PaymentRepositoryGateway implements PaymentRepository {
     }
 
     @Override
-    public Long createPaymentOrder(
+    public PaymentResponse createPaymentOrder(
         Double amount,
         String description,
         String paymentMethodId,

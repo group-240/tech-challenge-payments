@@ -22,10 +22,10 @@ public interface OrderJpaRepository extends MongoRepository<OrderJpaEntity, Long
        "WHEN 'RECEIVED' THEN 3 " +
        "ELSE 4 END, " +
        "o.createdAt ASC")*/
-    List<OrderJpaEntity> findByOptionalStatus(@Param("status") OrderStatusJpa status);
+    // List<OrderJpaEntity> findByOptionalStatus(@Param("status") OrderStatusJpa status);
 
     Optional<OrderJpaEntity> findByIdPayment(@Param("idPayment") Long idPayment);
 
     // @Query("SELECT CASE WHEN COUNT(o) > 0 THEN true ELSE false END FROM OrderJpaEntity o JOIN o.items i WHERE i.productId = :productId")
-    boolean existsByItemsProductId(@Param("productId") UUID productId);
+    // boolean existsByItemsProductId(@Param("productId") UUID productId);
 }

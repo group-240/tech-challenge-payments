@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
+/*    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
@@ -24,6 +24,7 @@ public class SecurityConfig {
                 
                 // Endpoints que não requerem autenticação (conforme regra de negócio)
                 .requestMatchers("/api/customers").permitAll() // Cadastro de cliente
+                    .requestMatchers("/api/payment/**").permitAll() // Cadastro de cliente
                 .requestMatchers("/api/categories/**").permitAll() // Consulta de categorias
                 .requestMatchers("/api/products/**").permitAll() // Consulta de produtos
                 .requestMatchers("/api/orders").permitAll() // Criação de pedido (pode ser anônimo)
@@ -36,6 +37,14 @@ public class SecurityConfig {
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
             );
 
+        return http.build();
+    }*/
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         return http.build();
     }
 
