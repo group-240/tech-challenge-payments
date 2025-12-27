@@ -2,6 +2,7 @@ package com.fiap.techchallenge.external.api;
 
 import com.fiap.techchallenge.adapters.controllers.PaymentController;
 import com.fiap.techchallenge.external.api.dto.PaymentOrderRequest;
+import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,10 +28,17 @@ public class PaymentRestController {
         this.paymentController = paymentController;
     }
 
-    @PostMapping("/create-order")
-    @Operation(summary = "Cria uma ordem de pagamento no Mercado Pago")
+    @PostMapping
+    @Operation(summary = "Cria um pagamento")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ordem de pagamento criada com sucesso", content = @Content(mediaType = "application/json")),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ordem de pagamento criada com sucesso",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PaymentResponse.class)
+                    )
+            ),
             @ApiResponse(responseCode = "400", description = "Erro na requisição, como parâmetros inválidos", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(mediaType = "application/json"))
     })
@@ -57,6 +65,28 @@ public class PaymentRestController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @Operation(summary = "Consulta um pagamento no Mercado Pago")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Sucesso na consulta do pagamento",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PaymentStatusResponse.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "400", description = "Erro na requisição, como parâmetros inválidos", content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<PaymentStatusResponse> getPaymentById(@PathVariable String id) {
+        PaymentStatusResponse response = paymentController.getPaymentById(id);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.techchallenge.domain.exception.DomainException;
+import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 import com.fiap.techchallenge.infrastructure.logging.LogCategory;
 import com.fiap.techchallenge.infrastructure.logging.StructuredLogger;
@@ -71,7 +72,6 @@ public class MercadoPagoClientImpl implements MercadoPagoClient {
             requestBody.append(String.format("\"payment_method_id\":\"%s\",", paymentMethodId));
             requestBody.append(String.format("\"installments\":%d", installments));
             requestBody.append(",");
-            //requestBody.append(String.format("\"token\":\"%s\",", accessToken));
             requestBody.append("\"payer\":{");
             requestBody.append(String.format("\"email\":\"%s\"", "brunoaugustoloc@gmail.com"));
             if (identificationType != null && identificationNumber != null) {
@@ -107,14 +107,18 @@ public class MercadoPagoClientImpl implements MercadoPagoClient {
         }
     }
 
-    private static Long getPaymentId(String response) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(response);
-            return root.path("id").asLong();
-        } catch (JsonProcessingException e) {
-            logger.error("Failed to parse MercadoPago response", e);
-            throw new DomainException("Error in getPaymentId: " + e.getMessage());
-        }
+    @Override
+    public PaymentStatusResponse getPaymentById(String paymentId) {
+        String url = "https://api.mercadopago.com/v1/payments/" + paymentId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<PaymentStatusResponse> response = restTemplate.exchange(
+                url, HttpMethod.GET, entity, PaymentStatusResponse.class
+        );
+        return response.getBody();
     }
+
 }

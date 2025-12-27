@@ -17,9 +17,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(
-        title = "Tech Challenge - Food Service API",
+        title = "Payment Service API",
         version = "1.0.0",
-        description = "API para sistema de serviço de alimentação desenvolvida com clean architecture"
+        description = "API para sistema de serviço de pagamento com mercado pago"
     )
 )
 public class TechChallengeApplication {

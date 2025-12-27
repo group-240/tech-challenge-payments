@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.application.usecases;
 
 import com.fiap.techchallenge.domain.repositories.PaymentRepository;
+import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 
 public class PaymentUseCaseImpl implements PaymentUseCase {
@@ -30,5 +31,10 @@ public class PaymentUseCaseImpl implements PaymentUseCase {
             identificationType,
             identificationNumber
         );
+    }
+
+    @Override
+    public PaymentStatusResponse getPaymentById(String paymentId){
+        return paymentRepository.getPaymentById(paymentId);
     }
 }

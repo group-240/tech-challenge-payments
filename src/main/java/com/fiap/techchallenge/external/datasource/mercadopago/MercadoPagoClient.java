@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.external.datasource.mercadopago;
 
+import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 
 public interface MercadoPagoClient {
@@ -12,4 +13,8 @@ public interface MercadoPagoClient {
         String identificationType,
         String identificationNumber
     );
+
+    PaymentStatusResponse getPaymentById(String paymentId);
+
+
 }

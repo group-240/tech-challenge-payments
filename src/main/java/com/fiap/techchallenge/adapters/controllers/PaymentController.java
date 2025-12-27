@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.adapters.controllers;
 
 import com.fiap.techchallenge.application.usecases.PaymentUseCase;
+import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 
 public class PaymentController {
@@ -29,5 +30,9 @@ public class PaymentController {
             identificationType,
             identificationNumber
         );
+    }
+
+    public PaymentStatusResponse getPaymentById(String paymentId){
+        return paymentUseCase.getPaymentById(paymentId);
     }
 }

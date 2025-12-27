@@ -39,12 +39,13 @@ management:
       probes:
         enabled: true
   metrics:
-    export:
-      prometheus:
-        enabled: true
     tags:
       application: ${spring.application.name}
       environment: dev
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 # Logging configuration (JSON estruturado - SRE)
 # Configuração detalhada em: logback-spring.xml
