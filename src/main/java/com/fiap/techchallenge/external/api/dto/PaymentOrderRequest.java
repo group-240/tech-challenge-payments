@@ -7,31 +7,30 @@ public class PaymentOrderRequest {
 
     @NotNull
     @DecimalMin("0.01")
-    @Schema(example = "1.00", description = "Valor da ordem de pagamento")
+    @Schema(example = "1.00", description = "Valor da ordem de pagamento", required = true)
     private Double amount;
 
-    @NotBlank
-    @Schema(example = "Test payment", description = "Descrição do pagamento")
+
+    @Schema(example = "Test payment", description = "Descrição do pagamento", required = false)
     private String description;
 
     @NotBlank
-    @Schema(example = "pix", description = "Método de pagamento")
+    @Schema(example = "pix", description = "Método de pagamento", required = true, allowableValues = {"Debin_transfer", "Ted", "pix", "CVU", "PSE"})
     private String paymentMethodId;
 
+    @NotBlank
     @Min(1)
-    @Schema(example = "1", description = "Número de parcelas")
+    @Schema(example = "1", description = "Número de parcelas" ,required = true)
     private Integer installments;
 
     @Email
-    @NotBlank
-    @Schema(example = "teste@gmail.com", description = "Email do pagador")
+    @Schema(example = "teste@gmail.com", description = "Email do pagador", required = false)
     private String payerEmail;
 
-    @NotBlank
-    @Schema(example = "CPF", description = "Tipo de identificação (CPF ou CNPJ)")
+    @Schema(example = "CPF", description = "Tipo de identificação (CPF ou CNPJ)", required = false, allowableValues = {"CPF", "CNPJ"})
     private String identificationType;
 
-    @Schema(example = "99515210020", description = "Número de identificação (CPF/CNPJ)")
+    @Schema(example = "99515210020", description = "Número de identificação (CPF/CNPJ)", required = false)
     private String identificationNumber;
 
     // Constructors

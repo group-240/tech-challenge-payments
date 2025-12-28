@@ -5,17 +5,14 @@ import com.fiap.techchallenge.external.api.dto.PaymentOrderRequest;
 import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.bson.Document;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/payment")
@@ -44,9 +41,8 @@ public class PaymentRestController {
     })
     public ResponseEntity<PaymentResponse> createOrder(@RequestBody PaymentOrderRequest request) {
         try {
-            if (request.getAmount() == null || request.getDescription() == null ||
-                    request.getPaymentMethodId() == null || request.getInstallments() == null ||
-                    request.getPayerEmail() == null) {
+            if (request.getAmount() == null ||
+                    request.getPaymentMethodId() == null || request.getInstallments() == null) {
 
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
@@ -81,6 +77,7 @@ public class PaymentRestController {
             @ApiResponse(responseCode = "400", description = "Erro na requisição, como parâmetros inválidos", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content(mediaType = "application/json"))
     })
+    @Parameter(name = "id", description = "ID do pagamento", example = "1325737896")
     public ResponseEntity<PaymentStatusResponse> getPaymentById(@PathVariable String id) {
         PaymentStatusResponse response = paymentController.getPaymentById(id);
         if (response == null) {

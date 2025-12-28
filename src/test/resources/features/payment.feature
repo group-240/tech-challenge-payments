@@ -1,12 +1,11 @@
-Funcionalidade: Pagamento
+Feature: Payment Controller
 
-  Cenário: Consulta de pagamento existente
-    Dado que existe um pagamento com id "123"
-    Quando eu consulto o pagamento pelo id "123"
-    Então o status da resposta deve ser "approved"
+  Scenario: Criar ordem de pagamento
+    Given que o use case de pagamento retorna sucesso
+    When eu crio uma ordem de pagamento
+    Then a ordem de pagamento deve ser criada com sucesso
 
-  Cenário: Consulta de pagamento inexistente
-    Dado que não existe um pagamento com id "999"
-    Quando eu consulto o pagamento pelo id "999"
-    Então a resposta deve ser 404
-
+  Scenario: Buscar pagamento por id
+    Given que existe um pagamento com id "123"
+    When eu busco o pagamento pelo id
+    Then o status do pagamento deve ser retornado
