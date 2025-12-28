@@ -6,12 +6,12 @@ spring:
       uri: mongodb+srv://techfiap:admintech!@clusterfree.nygqegp.mongodb.net/?appName=ClusterFree
       database: db_payment
 
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}
-#          jwk-set-uri: https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}/.well-known/jwks.json
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}
+          jwk-set-uri: https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}/.well-known/jwks.json
 
 # Swagger/OpenAPI configuration
 springdoc:
