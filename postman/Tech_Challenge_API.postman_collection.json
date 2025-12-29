@@ -1,0 +1,48 @@
+{
+  "info": {
+    "name": "Tech Challenge Payments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Criar Ordem de Pagamento",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 1,\n  \"paymentMethodId\": \"pix\",\n  \"installments\": 1,\n  \"description\": \"Test payment\",\n  \"payerEmail\": \"teste@email.com\",\n  \"identificationType\": \"CPF\",\n  \"identificationNumber\": \"99515210020\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/payments",
+          "host": ["{{baseUrl}}"],
+          "path": ["payments"]
+        }
+      }
+    },
+    {
+      "name": "Consultar Status do Pagamento",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/payments/{{paymentId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["payments", "{{paymentId}}", "status"]
+        }
+      }
+    }
+  ]
+}

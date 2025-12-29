@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: tech-challenge-api
+  data:
+    mongodb:
+      uri: mongodb+srv://techfiap:admintech!@clusterfree.nygqegp.mongodb.net/?appName=ClusterFree
+      database: db_payment
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}
+          jwk-set-uri: https://cognito-idp.${AWS_REGION:us-east-1}.amazonaws.com/${COGNITO_USER_POOL_ID:}/.well-known/jwks.json
+
+# Swagger/OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: dev
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# Logging configuration (JSON estruturado - SRE)
+# Configuração detalhada em: logback-spring.xml
+logging:
+  level:
+    root: INFO
+    com.fiap.techchallenge: INFO
+
+mercado-pago.access-token: TEST-6132655548485399-050519-5c52fb1e9a2a627837f4bff581e36402-495359857
