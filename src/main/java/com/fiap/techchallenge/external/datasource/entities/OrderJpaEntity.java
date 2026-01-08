@@ -1,32 +1,31 @@
 package com.fiap.techchallenge.external.datasource.entities;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Document(collection = "orders")
+@DynamoDbBean
 public class OrderJpaEntity {
 
-    @Id
     private Long id;
 
     private UUID customerId;
 
-
     private BigDecimal totalAmount;
 
-    private OrderStatusJpa status;
+    private String status;
 
-    private StatusPaymentJpa statusPayment;
+    private String statusPayment;
 
     private Long idPayment;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
     public OrderJpaEntity() {}
 
@@ -40,20 +39,37 @@ public class OrderJpaEntity {
     }
 
     // Getters and Setters
+    @DynamoDbPartitionKey
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public UUID getCustomerId() { return customerId; }
     public void setCustomerId(UUID customerId) { this.customerId = customerId; }
     public BigDecimal getTotalAmount() { return totalAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
-    public OrderStatusJpa getStatus() { return status; }
-    public void setStatus(OrderStatusJpa status) { this.status = status; }
-    public StatusPaymentJpa getStatusPayment() { return statusPayment; }
-    public void setStatusPayment(StatusPaymentJpa statusPayment) { this.statusPayment = statusPayment; }
+    
+    @DynamoDbSecondaryPartitionKey(indexNames = "status-index")
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getStatusPayment() { return statusPayment; }
+    public void setStatusPayment(String statusPayment) { this.statusPayment = statusPayment; }
     public Long getIdPayment() { return idPayment; }
     public void setIdPayment(Long idPayment) { this.idPayment = idPayment; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public String getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+    
+    // Helper methods para converter status
+    public void setStatusEnum(OrderStatusJpa statusEnum) { 
+        this.status = statusEnum != null ? statusEnum.name() : null; 
+    }
+    public OrderStatusJpa getStatusEnum() { 
+        return status != null ? OrderStatusJpa.valueOf(status) : null; 
+    }
+    public void setStatusPaymentEnum(StatusPaymentJpa statusPaymentEnum) { 
+        this.statusPayment = statusPaymentEnum != null ? statusPaymentEnum.name() : null; 
+    }
+    public StatusPaymentJpa getStatusPaymentEnum() { 
+        return statusPayment != null ? StatusPaymentJpa.valueOf(statusPayment) : null; 
+    }
 }
