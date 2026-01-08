@@ -1,70 +1,24 @@
-# Tech Challenge Payments
+# Tech Challenge - Payments
 
-API de pagamentos desenvolvida em Java com Spring Boot.
+Repositório responsável pelo microserviço de pagamentos.
 
-## Sumário
+## O que este repositório faz
 
-- [Descrição](#descrição)
-- [Tecnologias](#tecnologias)
-- [Como executar](#como-executar)
-- [Endpoints principais](#endpoints-principais)
-- [Testes](#testes)
-- [Coleção Postman](#coleção-postman)
-- [Licença](#licença)
+- **API de Pagamentos** - Processamento de pagamentos
+- **Integração MercadoPago** - Webhook de confirmação
+- **Deployment K8s** - Deploy no EKS via Terraform
 
-## Descrição
+## Dependências
 
-Este projeto implementa uma API REST para gerenciamento de ordens de pagamento, consulta de status e integração com métodos de pagamento como Pix.
+| Dependência | Descrição |
+|-------------|-----------|
+| tech-challenge-infra | EKS Cluster e ECR (via remote state) |
+| tech-challenge-dynamoDB | Tabelas DynamoDB (via remote state) |
+| Terraform >= 1.10.0 | Ferramenta de IaC |
+| Java 17 | Runtime da aplicação |
+| Maven | Build da aplicação |
 
-## Tecnologias
+## Secrets Necessários (GitHub)
 
-- Java 17+
-- Spring Boot
-- MongoDB
-- Maven
-- Swagger/OpenAPI
-- JUnit
-- Cucumber (BDD)
-
-## Como executar
-
-1. Clone o repositório:
-   ```bash
-   git clone <url-do-repositorio>
-   cd tech-challenge-payments
-   ```
-
-2. Compile o projeto:
-   ```bash
-   mvn clean install
-   ```
-
-3. Execute a aplicação:
-   ```bash
-   mvn spring-boot:run
-   ```
-
-4. Acesse a documentação Swagger:
-   ```
-   http://localhost:8080/swagger-ui.html
-   ```
-
-## Endpoints principais
-
-- **Criar ordem de pagamento**
-  - `POST /api/payments`
-- **Consultar status do pagamento**
-  - `GET /api/payments/{paymentId}/status`
-
-## Testes
-
-Para rodar os testes automatizados:
-```bash
-mvn test
-```
-
-## Coleção Postman
-
-A coleção de testes está disponível em `postman/Tech_Challenge_API.postman_collection.json`.  
-Importe no Postman e utilize a variável `baseUrl` para facilitar a execução dos endpoints.
-
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`

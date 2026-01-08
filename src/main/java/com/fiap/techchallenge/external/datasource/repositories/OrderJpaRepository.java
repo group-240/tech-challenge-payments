@@ -1,31 +1,59 @@
 package com.fiap.techchallenge.external.datasource.repositories;
 
 import com.fiap.techchallenge.external.datasource.entities.OrderJpaEntity;
-import com.fiap.techchallenge.external.datasource.entities.OrderJpaEntity.OrderStatusJpa;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.ScanEnhancedRequest;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface OrderJpaRepository extends MongoRepository<OrderJpaEntity, Long> {
+public class OrderJpaRepository {
 
-/*    @Query("SELECT o FROM OrderJpaEntity o " +
-       "WHERE o.status <> 'FINISHED' " +
-       "ORDER BY " +
-       "CASE o.status " +
-       "WHEN 'READY' THEN 1 " +
-       "WHEN 'IN_PREPARATION' THEN 2 " +
-       "WHEN 'RECEIVED' THEN 3 " +
-       "ELSE 4 END, " +
-       "o.createdAt ASC")*/
-    // List<OrderJpaEntity> findByOptionalStatus(@Param("status") OrderStatusJpa status);
+    private final DynamoDbTable<OrderJpaEntity> orderTable;
 
-    Optional<OrderJpaEntity> findByIdPayment(@Param("idPayment") Long idPayment);
+    public OrderJpaRepository(DynamoDbClient dynamoDbClient,
+                              @Value("${dynamodb.table.name:tech-challenge-orders}") String tableName) {
+        DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.builder()
+                .dynamoDbClient(dynamoDbClient)
+                .build();
+        this.orderTable = enhancedClient.table(tableName, TableSchema.fromBean(OrderJpaEntity.class));
+    }
 
-    // @Query("SELECT CASE WHEN COUNT(o) > 0 THEN true ELSE false END FROM OrderJpaEntity o JOIN o.items i WHERE i.productId = :productId")
-    // boolean existsByItemsProductId(@Param("productId") UUID productId);
+    public OrderJpaEntity save(OrderJpaEntity entity) {
+        orderTable.putItem(entity);
+        return entity;
+    }
+
+    public Optional<OrderJpaEntity> findById(Long id) {
+        Key key = Key.builder().partitionValue(id).build();
+        return Optional.ofNullable(orderTable.getItem(key));
+    }
+
+    public Optional<OrderJpaEntity> findByIdPayment(Long idPayment) {
+        // Scan to find by idPayment (consider using GSI for production)
+        return orderTable.scan(ScanEnhancedRequest.builder().build())
+                .items()
+                .stream()
+                .filter(item -> idPayment.equals(item.getIdPayment()))
+                .findFirst();
+    }
+
+    public List<OrderJpaEntity> findAll() {
+        List<OrderJpaEntity> results = new ArrayList<>();
+        orderTable.scan().items().forEach(results::add);
+        return results;
+    }
+
+    public void deleteById(Long id) {
+        Key key = Key.builder().partitionValue(id).build();
+        orderTable.deleteItem(key);
+    }
 }

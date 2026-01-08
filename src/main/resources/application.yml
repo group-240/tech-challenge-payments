@@ -1,10 +1,17 @@
 spring:
   application:
     name: tech-challenge-api
-  data:
-    mongodb:
-      uri: mongodb+srv://techfiap:admintech!@clusterfree.nygqegp.mongodb.net/?appName=ClusterFree
-      database: db_payment
+
+# AWS DynamoDB Configuration
+aws:
+  region: ${AWS_REGION:us-east-1}
+
+dynamodb:
+  table:
+    name: ${DYNAMODB_TABLE_NAME:tech-challenge-orders}
+  payments:
+    table:
+      name: ${DYNAMODB_PAYMENTS_TABLE_NAME:tech-challenge-payments}
 
   security:
     oauth2:

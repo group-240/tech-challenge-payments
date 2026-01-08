@@ -52,12 +52,19 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
+        <!-- ================= AWS ================= -->
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb</artifactId>
+            <version>2.21.29</version>
         </dependency>
 
-        <!-- ================= AWS ================= -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb-enhanced</artifactId>
+            <version>2.21.29</version>
+        </dependency>
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -141,6 +148,65 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                         </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- JaCoCo - Code Coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <!-- Excluir classes de configuração e entidades -->
+                        <exclude>**/config/**</exclude>
+                        <exclude>**/TechChallengeApplication.class</exclude>
+                        <exclude>**/external/datasource/entities/**</exclude>
+                        <exclude>**/external/api/dto/**</exclude>
+                        <exclude>**/external/cognito/**</exclude>
+                        <exclude>**/infrastructure/logging/**</exclude>
+                        <exclude>**/bdd/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
