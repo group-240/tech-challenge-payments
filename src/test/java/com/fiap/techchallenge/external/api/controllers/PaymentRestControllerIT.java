@@ -30,7 +30,7 @@ class PaymentRestControllerIT {
         req.setIdentificationNumber("12345678900");
 
         mockMvc.perform(
-                        post("/payment")
+                        post("/payments")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(new ObjectMapper().writeValueAsString(req))
                 )
