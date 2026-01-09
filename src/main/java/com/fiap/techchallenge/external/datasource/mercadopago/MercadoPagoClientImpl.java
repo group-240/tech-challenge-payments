@@ -1,14 +1,10 @@
 package com.fiap.techchallenge.external.datasource.mercadopago;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.techchallenge.domain.exception.DomainException;
 import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
 import com.fiap.techchallenge.infrastructure.logging.LogCategory;
 import com.fiap.techchallenge.infrastructure.logging.StructuredLogger;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +82,7 @@ public class MercadoPagoClientImpl implements MercadoPagoClient {
 
             String response = restTemplate.exchange(url, HttpMethod.POST, request, String.class).getBody();
 
-            Document document = paymentService.savePaymentJson(response);
+            paymentService.savePaymentJson(response);
 
             PaymentResponse payment = paymentService.parsePayment(response);
 
