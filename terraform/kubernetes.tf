@@ -1,3 +1,8 @@
+# ============================================
+# Kubernetes Deployment para Payments Service
+# NOTA: O namespace é criado pelo repo tech-challenge-infra
+# ============================================
+
 # Kubernetes Secret for DynamoDB configuration
 resource "kubernetes_secret" "dynamodb_config" {
   metadata {
@@ -17,7 +22,7 @@ resource "kubernetes_secret" "dynamodb_config" {
 # Kubernetes Deployment
 resource "kubernetes_deployment" "app" {
   metadata {
-    name      = "${var.app_name}-deployment"
+    name      = var.app_name
     namespace = var.namespace
     labels = {
       app = var.app_name
@@ -116,7 +121,7 @@ resource "kubernetes_deployment" "app" {
 # Kubernetes Service
 resource "kubernetes_service" "app" {
   metadata {
-    name      = "${var.app_name}-service"
+    name      = var.app_name
     namespace = var.namespace
   }
 
