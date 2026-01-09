@@ -160,9 +160,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
-                <configuration>
-                    <skip>${jacoco.skip}</skip>
-                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -183,6 +180,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <skip>${jacoco.skip}</skip>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
