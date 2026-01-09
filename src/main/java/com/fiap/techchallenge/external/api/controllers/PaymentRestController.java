@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.external.api;
+package com.fiap.techchallenge.external.api.controllers;
 
 import com.fiap.techchallenge.adapters.controllers.PaymentController;
 import com.fiap.techchallenge.external.api.dto.PaymentOrderRequest;
