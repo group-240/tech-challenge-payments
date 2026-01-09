@@ -2,7 +2,6 @@ package com.fiap.techchallenge.domain.repositories;
 
 import com.fiap.techchallenge.external.api.dto.PaymentStatusResponse;
 import com.fiap.techchallenge.external.datasource.entities.PaymentResponse;
-import org.bson.Document;
 
 public interface PaymentRepository {
     PaymentResponse createPaymentOrder(
