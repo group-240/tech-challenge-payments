@@ -198,8 +198,12 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!-- INCLUI APENAS A CLASSE PaymentRestController -->
+                    <includes>
+                        <include>com/fiap/techchallenge/external/api/controllers/PaymentRestController.class</include>
+                    </includes>
+                    <!-- EXCLUSÕES PADRÃO -->
                     <excludes>
-                        <!-- Excluir classes de configuração e entidades -->
                         <exclude>**/config/**</exclude>
                         <exclude>**/TechChallengeApplication.class</exclude>
                         <exclude>**/external/datasource/entities/**</exclude>
