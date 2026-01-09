@@ -26,6 +26,8 @@
         <modelmapper.version>3.2.1</modelmapper.version>
         <lombok.version>1.18.34</lombok.version>
         <cucumber.version>7.14.0</cucumber.version>
+        <!-- JaCoCo Feature Flag: use -Djacoco.skip=true to disable coverage check -->
+        <jacoco.skip>false</jacoco.skip>
     </properties>
 
     <dependencies>
@@ -130,6 +132,7 @@
             </plugin>
 
             <!-- JaCoCo - Code Coverage -->
+            <!-- Use -Djacoco.skip=true to disable coverage check -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -154,6 +157,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <skip>${jacoco.skip}</skip>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>

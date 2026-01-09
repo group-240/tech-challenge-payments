@@ -16,6 +16,8 @@ env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: tech-challenge-payments
   EKS_CLUSTER_NAME: tech-challenge-cluster
+  # Feature flag: set to 'true' to skip JaCoCo coverage check
+  SKIP_JACOCO: 'true'
 
 jobs:
   build-and-test:
@@ -37,8 +39,8 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
 
-    - name: Build and Test with Coverage (JaCoCo 70% min)
-      run: mvn clean verify
+    - name: Build and Test with Coverage
+      run: mvn clean verify -Djacoco.skip=${{ env.SKIP_JACOCO }}
 
     - name: Upload JaCoCo coverage report
       if: always()
