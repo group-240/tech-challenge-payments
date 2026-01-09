@@ -109,29 +109,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>${cucumber.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-spring</artifactId>
-            <version>${cucumber.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit-platform-engine</artifactId>
-            <version>${cucumber.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-
-
     </dependencies>
 
     <build>
@@ -199,18 +176,26 @@
                 </executions>
                 <configuration>
                     <!-- INCLUI APENAS A CLASSE PaymentRestController -->
-                    <includes>
+<!--                    <includes>
                         <include>com/fiap/techchallenge/external/api/controllers/PaymentRestController.class</include>
-                    </includes>
+                    </includes>-->
                     <!-- EXCLUSÕES PADRÃO -->
                     <excludes>
                         <exclude>**/config/**</exclude>
                         <exclude>**/TechChallengeApplication.class</exclude>
                         <exclude>**/external/datasource/entities/**</exclude>
                         <exclude>**/external/api/dto/**</exclude>
+                        <exclude>**/external/datasource/repositories/**</exclude>
                         <exclude>**/external/cognito/**</exclude>
                         <exclude>**/infrastructure/logging/**</exclude>
                         <exclude>**/bdd/**</exclude>
+                        <exclude>**/adapters/gateway/*</exclude>
+                        <exclude>**/application/usecases/*</exclude>
+                        <exclude>**/domain/entities/*</exclude>
+                        <exclude>**/domain/exception/*</exclude>
+                        <exclude>c**/external/api/controllers/*</exclude>
+                        <exclude>**/external/api/exception/*</exclude>
+                        <exclude>**/external/datasource/mercadopago/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>

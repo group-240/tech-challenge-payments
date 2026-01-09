@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.external.api;
+package com.fiap.techchallenge.external.api.controllers;
 import com.fiap.techchallenge.external.api.dto.PaymentOrderRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
