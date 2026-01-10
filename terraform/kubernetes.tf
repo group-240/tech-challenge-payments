@@ -29,6 +29,9 @@ resource "kubernetes_deployment" "app" {
     }
   }
 
+  # Evita erro "Unexpected Identity Change" 
+  wait_for_rollout = false
+
   spec {
     replicas = var.replicas
 
@@ -115,6 +118,13 @@ resource "kubernetes_deployment" "app" {
         }
       }
     }
+  }
+
+  # Ignora mudanças na imagem feitas por outros sistemas (ex: CI/CD manual)
+  lifecycle {
+    ignore_changes = [
+      spec[0].template[0].spec[0].container[0].image
+    ]
   }
 }
 
