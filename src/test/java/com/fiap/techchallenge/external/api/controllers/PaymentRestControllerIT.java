@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.external.api;
+package com.fiap.techchallenge.external.api.controllers;
 import com.fiap.techchallenge.external.api.dto.PaymentOrderRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ class PaymentRestControllerIT {
         req.setIdentificationNumber("12345678900");
 
         mockMvc.perform(
-                        post("/payment")
+                        post("/payments")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(new ObjectMapper().writeValueAsString(req))
                 )

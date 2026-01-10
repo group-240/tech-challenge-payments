@@ -1,3 +1,8 @@
+# ============================================
+# Kubernetes Deployment para Payments Service
+# NOTA: O namespace é criado pelo repo tech-challenge-infra
+# ============================================
+
 # Kubernetes Secret for DynamoDB configuration
 resource "kubernetes_secret" "dynamodb_config" {
   metadata {
@@ -17,12 +22,15 @@ resource "kubernetes_secret" "dynamodb_config" {
 # Kubernetes Deployment
 resource "kubernetes_deployment" "app" {
   metadata {
-    name      = "${var.app_name}-deployment"
+    name      = var.app_name
     namespace = var.namespace
     labels = {
       app = var.app_name
     }
   }
+
+  # Evita erro "Unexpected Identity Change" 
+  wait_for_rollout = false
 
   spec {
     replicas = var.replicas
@@ -111,12 +119,19 @@ resource "kubernetes_deployment" "app" {
       }
     }
   }
+
+  # Ignora mudanças na imagem feitas por outros sistemas (ex: CI/CD manual)
+  lifecycle {
+    ignore_changes = [
+      spec[0].template[0].spec[0].container[0].image
+    ]
+  }
 }
 
 # Kubernetes Service
 resource "kubernetes_service" "app" {
   metadata {
-    name      = "${var.app_name}-service"
+    name      = var.app_name
     namespace = var.namespace
   }
 
