@@ -1,6 +1,7 @@
 # Tech Challenge - Payments
 
 Repositório responsável pelo microserviço de pagamentos.
+Integração com Mercado Pago
 
 ## O que este repositório faz
 
