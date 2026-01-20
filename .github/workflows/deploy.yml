@@ -240,6 +240,69 @@ jobs:
         path: target/*.jar
 
   # ============================================
+  # AUTO PR - Cria PR após build/test passar
+  # ============================================
+  auto-pr:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - name: "📥 Checkout"
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: "🔀 Create PR to main"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+        echo "## 🔀 Auto PR" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Branch:** \`$BRANCH_NAME\`" >> $GITHUB_STEP_SUMMARY
+        
+        git fetch origin main --quiet
+        
+        PENDING_COMMITS=$(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)
+        
+        if [ "$PENDING_COMMITS" -eq 0 ]; then
+          echo "ℹ️ Sem commits pendentes para main" >> $GITHUB_STEP_SUMMARY
+          exit 0
+        fi
+        
+        echo "**Commits pendentes:** $PENDING_COMMITS" >> $GITHUB_STEP_SUMMARY
+        
+        EXISTING_PR=$(gh pr list --head "$BRANCH_NAME" --base main --state open --json number --jq '.[0].number')
+        
+        if [ -n "$EXISTING_PR" ] && [ "$EXISTING_PR" != "null" ]; then
+          echo "✅ PR #$EXISTING_PR já existe" >> $GITHUB_STEP_SUMMARY
+          exit 0
+        fi
+        
+        COMMIT_MSG=$(git log -1 --pretty=%s)
+        ALL_COMMITS=$(git log origin/main..HEAD --pretty=format:'- %h %s' | head -10)
+        
+        if gh pr create \
+          --base main \
+          --head "$BRANCH_NAME" \
+          --title "$COMMIT_MSG" \
+          --body "## Auto-generated PR
+
+        Build e testes passaram com sucesso ✅
+
+        **Branch:** \`$BRANCH_NAME\`
+        **Commits:** $PENDING_COMMITS
+
+        $ALL_COMMITS"; then
+          echo "✅ PR criada com sucesso!" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ PR já existe ou não foi possível criar" >> $GITHUB_STEP_SUMMARY
+        fi
+
+  # ============================================
   # TERRAFORM PLAN (Pull Requests only)
   # ============================================
   terraform-plan:
