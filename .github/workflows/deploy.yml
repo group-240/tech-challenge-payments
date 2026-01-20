@@ -30,7 +30,7 @@ env:
   EKS_CLUSTER_NAME: tech-challenge-cluster
   TF_LOG: ${{ github.event.inputs.debug_enabled == 'true' && 'DEBUG' || '' }}
   # Feature flag: set to 'true' to skip JaCoCo coverage check
-  SKIP_JACOCO: 'true'
+  SKIP_JACOCO: 'false'
 
 jobs:
   # ============================================
