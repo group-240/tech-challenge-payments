@@ -67,7 +67,8 @@ jobs:
           COMMIT_INFO=$(git log -1 --pretty=format:'%h - %s (%an, %ar)')
           ALL_COMMITS=$(git log origin/main..HEAD --pretty=format:'- %h %s' | head -10)
           
-          PR_BODY="## Auto-generated PR
+          PR_BODY=$(cat <<EOF
+## Auto-generated PR
 
 This PR was automatically created from branch \`$BRANCH_NAME\`.
 
@@ -75,7 +76,9 @@ This PR was automatically created from branch \`$BRANCH_NAME\`.
 $ALL_COMMITS
 
 ### Last Commit
-$COMMIT_INFO"
+$COMMIT_INFO
+EOF
+)
           
           # Try to create PR with retry
           for attempt in 1 2 3; do
