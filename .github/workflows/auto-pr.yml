@@ -1,7 +1,10 @@
 name: "Auto Create PR"
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI/CD Payments Service"]
+    types:
+      - completed
     branches-ignore:
       - main
 
@@ -12,21 +15,21 @@ permissions:
 jobs:
   auto-pr:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch != 'main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
-
-      - name: Wait for GitHub to sync
-        run: sleep 15
 
       - name: Check and create PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          BRANCH_NAME="${{ github.event.workflow_run.head_branch }}"
           echo "Branch: $BRANCH_NAME"
+          echo "Deploy workflow finished successfully, checking for PR..."
           
           git fetch origin main --quiet
           
@@ -49,13 +52,16 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%s)
           ALL_COMMITS=$(git log origin/main..HEAD --pretty=format:'- %h %s' | head -10)
           
+          echo "Creating PR..."
           gh pr create \
             --base main \
             --head "$BRANCH_NAME" \
             --title "$COMMIT_MSG" \
             --body "## Auto-generated PR
 
-          This PR was automatically created from branch \`$BRANCH_NAME\`.
+          This PR was automatically created after successful CI/CD.
 
-          ### Commits ($PENDING_COMMITS total)
+          **Branch:** \`$BRANCH_NAME\`
+          **Commits:** $PENDING_COMMITS
+
           $ALL_COMMITS" || echo "PR creation failed or already exists"
