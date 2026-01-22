@@ -14,9 +14,6 @@ resource "kubernetes_secret" "dynamodb_config" {
     AWS_REGION                    = data.terraform_remote_state.dynamodb.outputs.aws_region
     DYNAMODB_TABLE_NAME           = data.terraform_remote_state.dynamodb.outputs.dynamodb_table_name
     DYNAMODB_PAYMENTS_TABLE_NAME  = data.terraform_remote_state.dynamodb.outputs.dynamodb_payments_table_name
-    COGNITO_USER_POOL_ID          = data.terraform_remote_state.infra.outputs.cognito_user_pool_id
-    COGNITO_ISSUER_URI            = "https://cognito-idp.${data.terraform_remote_state.dynamodb.outputs.aws_region}.amazonaws.com/${data.terraform_remote_state.infra.outputs.cognito_user_pool_id}"
-    COGNITO_JWK_SET_URI           = "https://cognito-idp.${data.terraform_remote_state.dynamodb.outputs.aws_region}.amazonaws.com/${data.terraform_remote_state.infra.outputs.cognito_user_pool_id}/.well-known/jwks.json"
   }
 
   type = "Opaque"
@@ -86,36 +83,6 @@ resource "kubernetes_deployment" "app" {
               secret_key_ref {
                 name = kubernetes_secret.dynamodb_config.metadata[0].name
                 key  = "DYNAMODB_PAYMENTS_TABLE_NAME"
-              }
-            }
-          }
-
-          env {
-            name = "COGNITO_USER_POOL_ID"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.dynamodb_config.metadata[0].name
-                key  = "COGNITO_USER_POOL_ID"
-              }
-            }
-          }
-
-          env {
-            name = "COGNITO_ISSUER_URI"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.dynamodb_config.metadata[0].name
-                key  = "COGNITO_ISSUER_URI"
-              }
-            }
-          }
-
-          env {
-            name = "COGNITO_JWK_SET_URI"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.dynamodb_config.metadata[0].name
-                key  = "COGNITO_JWK_SET_URI"
               }
             }
           }
