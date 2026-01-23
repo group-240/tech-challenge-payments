@@ -173,27 +173,18 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- INCLUI APENAS A CLASSE PaymentRestController -->
-<!--                    <includes>
-                        <include>com/fiap/techchallenge/external/api/controllers/PaymentRestController.class</include>
-                    </includes>-->
-                    <!-- EXCLUSÕES PADRÃO -->
+                    <!-- EXCLUSÕES MÍNIMAS - Apenas configuração e DTOs -->
                     <excludes>
                         <exclude>**/config/**</exclude>
                         <exclude>**/TechChallengeApplication.class</exclude>
-                        <exclude>**/external/datasource/entities/**</exclude>
                         <exclude>**/external/api/dto/**</exclude>
-                        <exclude>**/external/datasource/repositories/**</exclude>
-                        <exclude>**/external/cognito/**</exclude>
+                        <exclude>**/external/datasource/entities/AdditionalInfo.class</exclude>
+                        <exclude>**/external/datasource/entities/ChargeDetail.class</exclude>
+                        <exclude>**/external/datasource/entities/ChargesExecutionInfo.class</exclude>
+                        <exclude>**/external/datasource/entities/FeeDetail.class</exclude>
+                        <exclude>**/external/datasource/entities/Payer.class</exclude>
+                        <exclude>**/external/datasource/entities/PaymentMethod.class</exclude>
                         <exclude>**/infrastructure/logging/**</exclude>
-                        <exclude>**/bdd/**</exclude>
-                        <exclude>**/adapters/gateway/*</exclude>
-                        <exclude>**/application/usecases/*</exclude>
-                        <exclude>**/domain/entities/*</exclude>
-                        <exclude>**/domain/exception/*</exclude>
-                        <exclude>c**/external/api/controllers/*</exclude>
-                        <exclude>**/external/api/exception/*</exclude>
-                        <exclude>**/external/datasource/mercadopago/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
