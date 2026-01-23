@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "app_name" {
   description = "Application name"
   type        = string
-  default     = "payments"
+  default     = "tech-challenge-payments"
 }
 
 variable "namespace" {
